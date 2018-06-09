@@ -1,0 +1,42 @@
+"Games"
+{
+	"tf"
+	{
+		"Functions"
+		{
+			"CTFPlayerShared::OnRemoveHalloweenTiny()"
+			{
+				"signature"		"CTFPlayerShared::OnRemoveHalloweenTiny()"
+				"callconv"		"thiscall"
+				"return"		"void"
+				"this"			"address"
+			}
+		}
+		
+		"Signatures"
+		{
+			"CTFPlayerShared::OnRemoveHalloweenTiny()"
+			{
+				// find a function with string "voice pitch scale" and a bunch of mov / floating point ops
+				"library"		"server"
+				"linux"			"@_ZN15CTFPlayerShared21OnRemoveHalloweenTinyEv"
+				"windows"		"\x53\x8B\xDC\x83\xEC\x08\x83\xE4\xF0\x83\xC4\x04\x55\x8B\x6B\x04\x89\x6C\x24\x04\x8B\xEC\x81\xEC\xE8\x00\x00\x00\xD9\xEE"
+			}
+		}
+		
+		"Offsets"
+		{
+			"CBaseEntity::GetBaseEntity()"
+			{
+				"windows"	"5"
+				"linux"		"6"
+			}
+			
+			// member offsets
+			"CTFPlayerShared::m_pOuter"
+			{
+				"linux"		"400"
+			}
+		}
+	}
+}
