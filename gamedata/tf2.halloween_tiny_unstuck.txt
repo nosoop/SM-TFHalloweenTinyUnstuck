@@ -36,6 +36,7 @@
 			"CTFPlayerShared::m_pOuter"
 			{
 				"linux"		"400"
+				"windows"	"400"
 			}
 		}
 	}

@@ -9,7 +9,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.0.0"
+#define PLUGIN_VERSION "1.1.0"
 public Plugin myinfo = {
 	name = "[TF2] Halloween Tiny Unstuck",
 	author = "nosoop",
@@ -86,32 +86,46 @@ bool FindValidTeleportDestination(int client, const float vecPosition[3],
 	 * teleport destination candidates.
 	 */
 	float vecTestPosition[3];
-	for (int x = -1; x <= 1; x++) {
-		for (int y = -1; y <= 1; y++) {
-			float vecOffset[] = { 0.0, 0.0, 10.0 };
-			
-			switch (x) {
-				case -1: { vecOffset[0] = vecMins[0]; }
-				case 1: { vecOffset[0] = vecMaxs[0]; }
+	for (int z = 0; z < 2; z++) {
+		float zpos;
+		switch (z) {
+			case 0: {
+				zpos = 10.0;
 			}
-			
-			switch (y) {
-				case -1: { vecOffset[1] = vecMins[1]; }
-				case 1: { vecOffset[1] = vecMaxs[1]; }
+			case 1: {
+				// less likely to hit the ceiling so do that second
+				zpos = -vecMaxs[2];
 			}
-			
-			AddVectors(vecPosition, vecOffset, vecTestPosition);
-			
-			trace = TR_TraceHullFilterEx(vecTestPosition, vecTestPosition, vecMins, vecMaxs,
-					MASK_PLAYERSOLID, TeleportTraceFilter, client);
-			
-			valid = !TR_DidHit(trace);
-			
-			delete trace;
-			
-			if (valid) {
-				vecDestination = vecTestPosition;
-				return true;
+		}
+		
+		for (int x = -1; x <= 1; x++) {
+			for (int y = -1; y <= 1; y++) {
+				float vecOffset[3];
+				vecOffset[2] = zpos;
+				
+				switch (x) {
+					case -1: { vecOffset[0] = vecMins[0]; }
+					case 1: { vecOffset[0] = vecMaxs[0]; }
+				}
+				
+				switch (y) {
+					case -1: { vecOffset[1] = vecMins[1]; }
+					case 1: { vecOffset[1] = vecMaxs[1]; }
+				}
+				
+				AddVectors(vecPosition, vecOffset, vecTestPosition);
+				
+				trace = TR_TraceHullFilterEx(vecTestPosition, vecTestPosition, vecMins, vecMaxs,
+						MASK_PLAYERSOLID, TeleportTraceFilter, client);
+				
+				valid = !TR_DidHit(trace);
+				
+				delete trace;
+				
+				if (valid) {
+					vecDestination = vecTestPosition;
+					return true;
+				}
 			}
 		}
 	}
