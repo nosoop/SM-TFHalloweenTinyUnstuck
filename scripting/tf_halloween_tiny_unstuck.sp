@@ -9,7 +9,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.1.0"
+#define PLUGIN_VERSION "1.1.1"
 public Plugin myinfo = {
 	name = "[TF2] Halloween Tiny Unstuck",
 	author = "nosoop",
@@ -134,10 +134,10 @@ bool FindValidTeleportDestination(int client, const float vecPosition[3],
 }
 
 /** 
- * Return true if teleport should be stopped.
+ * Return true if traced entity should prevent teleport to that position.
  */
 public bool TeleportTraceFilter(int entity, int contents, int client) {
-	return entity > 1 && client != entity;
+	return entity >= 1 && client != entity;
 }
 
 int GetEntityFromAddress(Address pEntity) {
