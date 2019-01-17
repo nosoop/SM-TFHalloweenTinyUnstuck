@@ -9,7 +9,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.2.0"
+#define PLUGIN_VERSION "1.2.1"
 public Plugin myinfo = {
 	name = "[TF2] Halloween Tiny Unstuck",
 	author = "nosoop",
@@ -153,7 +153,7 @@ public bool TeleportTraceFilter(int entity, int contents, int client) {
 	}
 	
 	// check if traced entity is a player and check for friendly unstuck
-	if (entity < MaxClients
+	if (entity <= MaxClients
 			&& g_TinyUnstuckAllowTeammates.BoolValue
 			&& GetClientTeam(entity) == GetClientTeam(client)) {
 		return false;
