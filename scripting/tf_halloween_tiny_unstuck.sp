@@ -9,7 +9,7 @@
 
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.1.1"
+#define PLUGIN_VERSION "1.2.0"
 public Plugin myinfo = {
 	name = "[TF2] Halloween Tiny Unstuck",
 	author = "nosoop",
@@ -20,6 +20,8 @@ public Plugin myinfo = {
 
 Handle g_DHookOnRemoveHalloweenTiny;
 Handle g_SDKCallGetBaseEntity;
+
+ConVar g_TinyUnstuckAllowTeammates;
 
 static Address g_offset_CTFPlayerShared_pOuter;
 
@@ -40,6 +42,9 @@ public void OnPluginStart() {
 			view_as<Address>(GameConfGetOffset(hGameConf, "CTFPlayerShared::m_pOuter"));
 	
 	delete hGameConf;
+	
+	g_TinyUnstuckAllowTeammates = CreateConVar("sm_tf_tiny_unstuck_allow_teammates", "1",
+			"Allow the unstuck routine to teleport players into their teammates.");
 }
 
 public MRESReturn OnRemoveHalloweenTinyPre(Address pPlayerShared) {
@@ -137,7 +142,24 @@ bool FindValidTeleportDestination(int client, const float vecPosition[3],
  * Return true if traced entity should prevent teleport to that position.
  */
 public bool TeleportTraceFilter(int entity, int contents, int client) {
-	return entity >= 1 && client != entity;
+	// ignore world (hull should hit it anyways)
+	if (entity <= 0) {
+		return false;
+	}
+	
+	// allow teleport to self
+	if (client == entity) {
+		return false;
+	}
+	
+	// check if traced entity is a player and check for friendly unstuck
+	if (entity < MaxClients
+			&& g_TinyUnstuckAllowTeammates.BoolValue
+			&& GetClientTeam(entity) == GetClientTeam(client)) {
+		return false;
+	}
+	
+	return true;
 }
 
 int GetEntityFromAddress(Address pEntity) {
