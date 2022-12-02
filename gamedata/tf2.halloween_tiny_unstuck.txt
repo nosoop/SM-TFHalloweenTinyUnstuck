@@ -35,8 +35,8 @@
 			// member offsets
 			"CTFPlayerShared::m_pOuter"
 			{
-				"linux"		"400"
-				"windows"	"400"
+				"linux"		"396"
+				"windows"	"396"
 			}
 		}
 	}
